@@ -23,12 +23,19 @@ export class AssignmentCreationPage {
     DueDate: string;
     DateAssigned: string;
     GithubLink: string;
+    user: any = null;
 
-
+    doneCallback: any = null;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public dataService: DataService) {
-        this.dataService.setClass("Mobile Development 2017");
+        this.getUser();
     }
+
+    getUser(){
+    this.dataService.getUserAuthStatus().subscribe(user => {
+      this.user = user;
+    });
+  }
 
     addAssignment() {
     let assignment:Assignment = new Assignment();
@@ -42,7 +49,11 @@ export class AssignmentCreationPage {
       assignment.GithubLink = this.GithubLink;
   //  assignment.Key // DON'T MODIFY KEY
 
-    this.dataService.addAssignment(assignment);
+    this.dataService.addAssignment(assignment).then(() => {
+        this.navCtrl.pop();
+        
+    });
+    
     }
 
 }
